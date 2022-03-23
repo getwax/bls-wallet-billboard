@@ -27,5 +27,7 @@ module.exports = {
     "node/no-unpublished-import": "off",
     "node/no-missing-import": "off",
     "no-use-before-define": "off",
+    "no-redeclare": "off",
+    camelcase: "off",
   },
 };
