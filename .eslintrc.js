@@ -24,5 +24,8 @@ module.exports = {
     "prefer-const": "warn",
     "prettier/prettier": "warn",
     "no-unused-expressions": "warn",
+    "node/no-unpublished-import": "off",
+    "node/no-missing-import": "off",
+    "no-use-before-define": "off",
   },
 };
