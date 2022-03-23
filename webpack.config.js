@@ -1,7 +1,7 @@
 const path = require("path");
 
 module.exports = {
-  entry: "./frontend/index.ts",
+  entry: "./frontend/index.tsx",
   module: {
     rules: [
       {
@@ -19,4 +19,16 @@ module.exports = {
     path: path.resolve(__dirname, "build"),
   },
   mode: "development",
+  devServer: {
+    static: [
+      {
+        directory: path.join(__dirname, "build"),
+      },
+      {
+        directory: path.join(__dirname, "assets"),
+      },
+    ],
+    compress: true,
+    port: 9000,
+  },
 };
