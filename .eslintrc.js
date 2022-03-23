@@ -20,5 +20,9 @@ module.exports = {
       "error",
       { ignores: ["modules"] },
     ],
+    "no-unused-vars": "warn",
+    "prefer-const": "warn",
+    "prettier/prettier": "warn",
+    "no-unused-expressions": "warn",
   },
 };

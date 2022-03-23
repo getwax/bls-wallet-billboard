@@ -1,6 +1,9 @@
 {
   "name": "bls-wallet-billboard",
   "version": "1.0.0",
+  "engines": {
+    "node": ">=16.0.0"
+  },
   "description": "Example dApp for bls-wallet which pays for user transactions",
   "main": "build/js/src/index.js",
   "author": "Andrew Morris <voltrevo@gmail.com>",

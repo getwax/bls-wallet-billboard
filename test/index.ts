@@ -1,19 +1,69 @@
 import { expect } from "chai";
-import { ethers } from "hardhat";
+import { BigNumber } from "ethers";
+import { ethers, waffle } from "hardhat";
 
-describe("Greeter", function () {
-  it("Should return the new greeting once it's changed", async function () {
-    const Greeter = await ethers.getContractFactory("Greeter");
-    const greeter = await Greeter.deploy("Hello, world!");
-    await greeter.deployed();
+const provider = waffle.provider;
 
-    expect(await greeter.greet()).to.equal("Hello, world!");
+async function expectReject(promise: Promise<unknown>, message?: string) {
+  try {
+    await promise;
+  } catch {
+    return;
+  }
 
-    const setGreetingTx = await greeter.setGreeting("Hola, mundo!");
+  throw new Error(message ?? "Expected promise to reject but it didn't");
+}
 
-    // wait until the transaction is mined
-    await setGreetingTx.wait();
+describe("Billboard", function () {
+  it("Basic usage", async function () {
+    const Billboard = await ethers.getContractFactory("Billboard");
+    const billboard = await Billboard.deploy(ethers.utils.parseEther("1.0"));
+    await billboard.deployed();
 
-    expect(await greeter.greet()).to.equal("Hola, mundo!");
+    const signers = await ethers.getSigners();
+
+    const [owner, client] = signers.slice(1);
+
+    // Can set owner
+    await (await billboard.setOwner(owner.address)).wait();
+    expect(await billboard.owner()).to.eq(owner.address);
+
+    // After setting owner, can't set owner again (only owner can setOwner)
+    await expectReject(billboard.setOwner(client.address));
+
+    expect(await billboard.billboardHash()).to.eq(ethers.constants.HashZero);
+    expect(await billboard.leaseExpiry()).to.eq(BigNumber.from(0));
+
+    const ownerInitialBalance = await provider.getBalance(owner.address);
+
+    const threeDays = 3 * 86_400;
+
+    const billboardHash = ethers.utils.keccak256(
+      new TextEncoder().encode("example")
+    );
+
+    const expectedDailyRent = ethers.utils.parseEther("1.0");
+
+    // Fails because we forgot to pay
+    await expectReject(
+      billboard.connect(client).rent(billboardHash, expectedDailyRent)
+    );
+
+    const tx = await (
+      await billboard.connect(client).rent(billboardHash, expectedDailyRent, {
+        value: expectedDailyRent.mul(3),
+      })
+    ).wait();
+
+    const blockTimestamp = (await provider.getBlock(tx.blockHash)).timestamp;
+
+    expect(await billboard.billboardHash()).to.eq(billboardHash);
+
+    const ownerPayment = (await provider.getBalance(owner.address)).sub(
+      ownerInitialBalance
+    );
+
+    expect(ownerPayment).to.eq(expectedDailyRent.mul(3));
+    expect(await billboard.leaseExpiry()).to.eq(blockTimestamp + threeDays);
   });
 });
