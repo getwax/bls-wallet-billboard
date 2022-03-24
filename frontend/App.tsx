@@ -114,9 +114,12 @@ const App: React.FunctionComponent = () => {
                 Rent this billboard for the low low price of{" "}
                 {ethers.utils.formatEther(billboardInfo.dailyRent)} ETH per day!
               </div>
-              <div>
+              <div
+                style={{ display: "flex", flexDirection: "column", gap: "3px" }}
+              >
                 <div>
-                  Send ETH <input type="text" ref={setSendEthElement} />
+                  Send ETH &nbsp;
+                  <input type="text" ref={setSendEthElement} />
                 </div>
                 <div>
                   Billboard <input type="text" ref={setBillboardElement} />
