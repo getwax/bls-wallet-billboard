@@ -4,6 +4,7 @@ import { Billboard__factory } from "../typechain";
 import loadConfig from "./loadConfig";
 
 const provider = new ethers.providers.Web3Provider((window as any).ethereum);
+const config = loadConfig();
 
 const App: React.FunctionComponent = () => {
   const [billboardInfo, setBillboardInfo] = React.useState<{
@@ -12,10 +13,18 @@ const App: React.FunctionComponent = () => {
     dailyRent: BigNumber;
   }>();
 
+  const [sendEthElement, setSendEthElement] =
+    React.useState<HTMLInputElement | null>(null);
+
+  const [billboardElement, setBillboardElement] =
+    React.useState<HTMLInputElement | null>(null);
+
+  const [progressMsg, setProgressMsg] = React.useState("");
+
   React.useEffect(() => {
     (async () => {
       const billboard = Billboard__factory.connect(
-        loadConfig().billboardAddress,
+        config.billboardAddress,
         provider
       );
 
@@ -37,6 +46,45 @@ const App: React.FunctionComponent = () => {
   const effectiveBillboardHash = leaseActive
     ? billboardInfo.billboardHash
     : ethers.constants.HashZero;
+
+  async function rent() {
+    if (
+      sendEthElement === null ||
+      billboardElement === null ||
+      billboardInfo === undefined
+    ) {
+      return;
+    }
+
+    setProgressMsg("Connecting...");
+
+    try {
+      await provider.send("eth_requestAccounts", []);
+
+      const billboard = Billboard__factory.connect(
+        config.billboardAddress,
+        provider.getSigner()
+      );
+
+      setProgressMsg("Sending...");
+
+      const tx = await billboard.rent(
+        billboardElement.value,
+        billboardInfo.dailyRent,
+        {
+          value: ethers.utils.parseEther(sendEthElement.value),
+        }
+      );
+
+      setProgressMsg("Waiting for confirmation...");
+
+      const recpt = await tx.wait();
+
+      setProgressMsg(`Confirmed! ${recpt.transactionHash}`);
+    } catch (error) {
+      setProgressMsg(`Error: ${(error as Error).stack}`);
+    }
+  }
 
   return (
     <>
@@ -68,31 +116,31 @@ const App: React.FunctionComponent = () => {
               </div>
               <div>
                 <div>
-                  Send ETH <input type="text" />
+                  Send ETH <input type="text" ref={setSendEthElement} />
                 </div>
                 <div>
-                  Billboard <input type="text" />
+                  Billboard <input type="text" ref={setBillboardElement} />
                 </div>
                 <div>
-                  <button>Rent</button>
+                  <button onClick={() => rent()}>Rent</button>
+                </div>
+                <div>{progressMsg}</div>
+              </div>
+              <div>
+                <div>Available billboards</div>
+                <div>
+                  <a href="/billboards/0x1d85c73c13ff284beab6c81f06dff8197093b29927fe1ab8394b6ac66eeb0460.png">
+                    0x1d85c73c13ff284beab6c81f06dff8197093b29927fe1ab8394b6ac66eeb0460
+                  </a>
+                </div>
+                <div>
+                  <a href="/billboards/0xdef55c3887e6fceb201e04f2c8d080109896b8cc9e30b33b6bf9803046e1b0da.png">
+                    0xdef55c3887e6fceb201e04f2c8d080109896b8cc9e30b33b6bf9803046e1b0da
+                  </a>
                 </div>
               </div>
             </>
           )}
-
-          <div>
-            <div>Available billboards</div>
-            <div>
-              <a href="/billboards/0x1d85c73c13ff284beab6c81f06dff8197093b29927fe1ab8394b6ac66eeb0460.png">
-                0x1d85c73c13ff284beab6c81f06dff8197093b29927fe1ab8394b6ac66eeb0460
-              </a>
-            </div>
-            <div>
-              <a href="/billboards/0xdef55c3887e6fceb201e04f2c8d080109896b8cc9e30b33b6bf9803046e1b0da.png">
-                0xdef55c3887e6fceb201e04f2c8d080109896b8cc9e30b33b6bf9803046e1b0da
-              </a>
-            </div>
-          </div>
         </>
       )}
     </>

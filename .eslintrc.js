@@ -29,5 +29,7 @@ module.exports = {
     "no-use-before-define": "off",
     "no-redeclare": "off",
     camelcase: "off",
+    "no-undef": "off",
+    "no-useless-return": "warn",
   },
 };

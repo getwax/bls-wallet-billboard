@@ -33,6 +33,9 @@ const config: HardhatUserConfig = {
     gethDev: {
       url: "http://localhost:8545",
     },
+    hardhat: {
+      chainId: 1337,
+    },
   },
   gasReporter: {
     enabled: process.env.REPORT_GAS !== undefined,
