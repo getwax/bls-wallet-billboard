@@ -18,7 +18,7 @@ git clone git@github.com:voltrevo/bls-wallet-billboard
 cd bls-wallet-billboard
 yarn
 yarn hardhat node
-yarn hardhat run scripts/deploy.ts # note deployed address (the hex string)
+yarn hardhat run scripts/deploy.ts --network gethDev # note deployed address (the hex string)
 cp frontend/config.example.json frontend/config.json
 # Change billboardAddress in config.json to the address from running deploy.ts
 yarn webpack serve
