@@ -1,46 +1,61 @@
-# Advanced Sample Hardhat Project
+# BLS Wallet Billboard
 
-This project demonstrates an advanced Hardhat use case, integrating other tools commonly used alongside Hardhat in the ecosystem.
+Example dApp for [bls-wallet](https://github.com/jzaki/bls-wallet) which pays
+for user transactions¹.
 
-The project comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts. It also comes with a variety of other tools, preconfigured to work with the project code.
+¹It's just a vanilla dApp and doesn't pay for user transactions yet.
 
-Try running some of the following tasks:
+## Prerequisites
 
-```shell
-npx hardhat accounts
-npx hardhat compile
-npx hardhat clean
-npx hardhat test
-npx hardhat node
-npx hardhat help
-REPORT_GAS=true npx hardhat test
-npx hardhat coverage
-npx hardhat run scripts/deploy.ts
-TS_NODE_FILES=true npx ts-node scripts/deploy.ts
-npx eslint '**/*.{js,ts}'
-npx eslint '**/*.{js,ts}' --fix
-npx prettier '**/*.{json,sol,md}' --check
-npx prettier '**/*.{json,sol,md}' --write
-npx solhint 'contracts/**/*.sol'
-npx solhint 'contracts/**/*.sol' --fix
+- Nodejs
+- Yarn
+- Metamask
+
+## Development Instructions
+
+```
+git clone git@github.com:voltrevo/bls-wallet-billboard
+cd bls-wallet-billboard
+yarn
+yarn hardhat node
+yarn hardhat run scripts/deploy.ts # note deployed address (the hex string)
+cp frontend/config.example.json frontend/config.json
+# Change billboardAddress in config.json to the address from running deploy.ts
+yarn webpack serve
 ```
 
-# Etherscan verification
+Then open http://localhost:9000.
 
-To try out Etherscan verification, you first need to deploy a contract to an Ethereum network that's supported by Etherscan, such as Ropsten.
+If needed, change the metamask network to localhost and refresh.
 
-In this project, copy the .env.example file to a file named .env, and then edit it to fill in the details. Enter your Etherscan API key, your Ropsten node URL (eg from Alchemy), and the private key of the account which will send the deployment transaction. With a valid .env file in place, first deploy your contract:
+It should look like this:
 
-```shell
-hardhat run --network ropsten scripts/deploy.ts
+![Initial screen](./docs/images/initial-screen.png)
+
+Import one of the test accounts that's initially displayed when running
+`yarn hardhat node`.
+
+Fill in these values:
+
+```
+Send ETH:  0.0005
+Billboard: 0x1d85c73c13ff284beab6c81f06dff8197093b29927fe1ab8394b6ac66eeb0460
+(Or copy and paste your billboard of choice from the available billboards.)
 ```
 
-Then, copy the deployment address and paste it in to replace `DEPLOYED_CONTRACT_ADDRESS` in this command:
+**Important**: I'm about to tell you to send a transaction through metamask.
+Please be wary of following instructions like this. It's up to you to ensure
+you only authorize metamask to do something you want to do.
 
-```shell
-npx hardhat verify --network ropsten DEPLOYED_CONTRACT_ADDRESS "Hello, Hardhat!"
-```
+Click **Rent** and follow the prompts from metamask.
 
-# Performance optimizations
+It should say 'Confirmed' and provide a transaction hash. If so, reload and
+you should get something like this:
 
-For faster runs of your tests and scripts, consider skipping ts-node's type checking by setting the environment variable `TS_NODE_TRANSPILE_ONLY` to `1` in hardhat's environment. For more details see [the documentation](https://hardhat.org/guides/typescript.html#performance-optimizations).
+![Dogs screen](./docs/images/dogs-screen.png)
+
+If you reload again after the listed expiry time, it'll revert back to 'your
+ad here'. You may then wish to try the other billboard, and get a result like
+this:
+
+![Cats screen](./docs/images/cats-screen.png)
