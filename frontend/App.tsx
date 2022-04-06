@@ -1,12 +1,31 @@
 import { BigNumber, ethers } from "ethers";
 import * as React from "react";
 import { Billboard__factory } from "../typechain";
-import loadConfig from "./loadConfig";
+import loadConfig, { Config } from "./loadConfig";
 
-const provider = new ethers.providers.Web3Provider((window as any).ethereum);
-const config = loadConfig();
+const init = (() => {
+  let data:
+    | {
+        provider: ethers.providers.Web3Provider;
+        config: Config;
+      }
+    | undefined;
+
+  return () => {
+    if (!data) {
+      data = {
+        provider: new ethers.providers.Web3Provider((window as any).ethereum),
+        config: loadConfig(),
+      };
+    }
+
+    return data;
+  };
+})();
 
 const App: React.FunctionComponent = () => {
+  const { provider, config } = init();
+
   const [billboardInfo, setBillboardInfo] = React.useState<{
     billboardHash: string;
     leaseExpiry: BigNumber;
@@ -27,6 +46,8 @@ const App: React.FunctionComponent = () => {
         config.billboardAddress,
         provider
       );
+
+      (window as any).billboard = billboard;
 
       setBillboardInfo({
         billboardHash: await billboard.billboardHash(),
