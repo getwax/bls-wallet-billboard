@@ -1,6 +1,6 @@
 import { BigNumber, ethers } from "ethers";
 import * as React from "react";
-import { Billboard__factory } from "../typechain";
+import { Billboard, Billboard__factory } from "../typechain";
 import loadConfig from "./loadConfig";
 
 const provider = new ethers.providers.Web3Provider((window as any).ethereum);
@@ -21,20 +21,55 @@ const App: React.FunctionComponent = () => {
 
   const [progressMsg, setProgressMsg] = React.useState("");
 
-  React.useEffect(() => {
-    (async () => {
-      const billboard = Billboard__factory.connect(
+  const billboardRef = React.useRef<Billboard>();
+
+  const refreshBillboard = React.useCallback(async () => {
+    if (!billboardRef.current) {
+      billboardRef.current = Billboard__factory.connect(
         config.billboardAddress,
         provider
       );
+    }
+    const billboard = billboardRef.current;
 
-      setBillboardInfo({
-        billboardHash: await billboard.billboardHash(),
-        leaseExpiry: await billboard.leaseExpiry(),
-        dailyRent: await billboard.dailyRent(),
-      });
-    })().catch(console.error);
+    const [billboardHash, leaseExpiry, dailyRent] = await Promise.all([
+      billboard.billboardHash(),
+      billboard.leaseExpiry(),
+      billboard.dailyRent(),
+    ]);
+
+    setBillboardInfo({
+      billboardHash,
+      leaseExpiry,
+      dailyRent,
+    });
   }, []);
+
+  const handleNewBlock = React.useCallback(
+    async (blockNumber: number) => {
+      try {
+        console.debug(`new block ${blockNumber}`);
+        await refreshBillboard();
+      } catch (err) {
+        console.error(err);
+      }
+    },
+    [refreshBillboard]
+  );
+
+  React.useEffect(() => {
+    (async () => {
+      await refreshBillboard();
+    })().catch(console.error);
+  }, [refreshBillboard]);
+
+  React.useEffect(() => {
+    provider.on("block", handleNewBlock);
+
+    return () => {
+      provider.off("block", handleNewBlock);
+    };
+  }, [handleNewBlock]);
 
   if (billboardInfo === undefined) {
     return <>Loading...</>;
@@ -81,6 +116,10 @@ const App: React.FunctionComponent = () => {
       const recpt = await tx.wait();
 
       setProgressMsg(`Confirmed! ${recpt.transactionHash}`);
+
+      await refreshBillboard();
+
+      setProgressMsg("");
     } catch (error) {
       setProgressMsg(`Error: ${(error as Error).stack}`);
     }
