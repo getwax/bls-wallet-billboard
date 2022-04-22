@@ -118,7 +118,7 @@ const App: React.FunctionComponent = () => {
               border: "3px solid black",
               width: "80vw",
               height: "25vw",
-              background: `url(/billboards/${effectiveBillboardHash}.png) center no-repeat`,
+              background: `url(billboards/${effectiveBillboardHash}.png) center no-repeat`,
               backgroundSize: "contain",
             }}
           />
@@ -153,12 +153,12 @@ const App: React.FunctionComponent = () => {
               <div>
                 <div>Available billboards</div>
                 <div>
-                  <a href="/billboards/0x1d85c73c13ff284beab6c81f06dff8197093b29927fe1ab8394b6ac66eeb0460.png">
+                  <a href="billboards/0x1d85c73c13ff284beab6c81f06dff8197093b29927fe1ab8394b6ac66eeb0460.png">
                     0x1d85c73c13ff284beab6c81f06dff8197093b29927fe1ab8394b6ac66eeb0460
                   </a>
                 </div>
                 <div>
-                  <a href="/billboards/0xdef55c3887e6fceb201e04f2c8d080109896b8cc9e30b33b6bf9803046e1b0da.png">
+                  <a href="billboards/0xdef55c3887e6fceb201e04f2c8d080109896b8cc9e30b33b6bf9803046e1b0da.png">
                     0xdef55c3887e6fceb201e04f2c8d080109896b8cc9e30b33b6bf9803046e1b0da
                   </a>
                 </div>
