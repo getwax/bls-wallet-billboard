@@ -1,5 +1,11 @@
 import { runAggregatorProxy } from "bls-wallet-aggregator-proxy";
 
+import loadConfig from "./loadConfig";
+
+const config = loadConfig();
+
+console.log({ config });
+
 runAggregatorProxy(
   "https://arbitrum-testnet.blswallet.org",
   (b) => b,
