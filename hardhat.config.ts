@@ -36,6 +36,15 @@ const config: HardhatUserConfig = {
     hardhat: {
       chainId: 1337,
     },
+    arbitrum_testnet: {
+      // chainId: 421611
+      url: "https://rinkeby.arbitrum.io/rpc",
+      accounts: [
+        "0x725814462ed3fbcb1e16ca56af7a5344404784d099b59c2b31fa4ac8f8d82045",
+      ],
+      // gas: 10_000_000,
+      gasPrice: 1408857682, // 287938372,
+    },
   },
   gasReporter: {
     enabled: process.env.REPORT_GAS !== undefined,
