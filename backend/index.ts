@@ -4,14 +4,14 @@ import loadConfig from "./loadConfig";
 
 const config = loadConfig();
 
-console.log({ config });
-
 runAggregatorProxy(
-  "https://arbitrum-testnet.blswallet.org",
+  config.upstreamAggregator,
   (b) => b,
-  8080,
-  "0.0.0.0",
+  config.port,
+  config.hostname,
   () => {
-    console.log("Proxying aggregator on port 8080");
+    console.log(
+      `Proxying ${config.upstreamAggregator} on ${config.hostname}:${config.port}`
+    );
   }
 );

@@ -4,6 +4,8 @@ const configJson = require("./config.json");
 
 export const Config = io.type({
   upstreamAggregator: io.string,
+  port: io.number,
+  hostname: io.string,
   privateBlsKey: io.string,
   sponsoredContracts: io.array(io.string),
 });
