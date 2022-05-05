@@ -8,6 +8,10 @@ export const Config = io.type({
   hostname: io.string,
   privateBlsKey: io.string,
   sponsoredContracts: io.array(io.string),
+  verificationGateway: io.string,
+  aggregatorUtilities: io.string,
+  chainId: io.number,
+  rpcUrl: io.string,
 });
 
 export type Config = io.TypeOf<typeof Config>;

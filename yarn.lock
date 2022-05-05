@@ -1530,9 +1530,9 @@
     form-data "^3.0.0"
 
 "@types/node@*":
-  version "17.0.22"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-17.0.22.tgz#38b6c4b9b2f3ed9f2e376cce42a298fb2375251e"
-  integrity sha512-8FwbVoG4fy+ykY86XCAclKZDORttqE5/s7dyWZKLXTdv3vRy5HozBEinG5IqhvPXXzIZEcTVbuHlQEI6iuwcmw==
+  version "17.0.31"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-17.0.31.tgz#a5bb84ecfa27eec5e1c802c6bbf8139bdb163a5d"
+  integrity sha512-AR0x5HbXGqkEx9CadRH3EBYx/VkiUgZIhP4wvPn/+5KIsgpNoyFaRlVe0Zlx9gRtg8fA06a9tskE2MSN7TcG4Q==
 
 "@types/node@^10.0.3":
   version "10.17.60"
@@ -2997,9 +2997,9 @@ blakejs@^1.1.0:
   integrity sha512-QXUSXI3QVc/gJME0dBpXrag1kbzOqCjCX8/b54ntNyW6sjtoqxqRk3LTmXzaJoh71zMsDCjM+47jS7XiwN/+fQ==
 
 bls-wallet-aggregator-proxy@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/bls-wallet-aggregator-proxy/-/bls-wallet-aggregator-proxy-0.1.0.tgz#84abe42d4faa71dafb85b54437fceefdd2fc2fb1"
-  integrity sha512-Tj6NmV90Y3dJ4bD5dfvVvl15J0wF5FNys9XxhyZPTUE5WBhX3zBPRfbrW7lez9rKR6/1LH2ATUS3c9JMZDu9Dg==
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/bls-wallet-aggregator-proxy/-/bls-wallet-aggregator-proxy-0.1.1.tgz#111bcf74480efc346473ad36228db52daa3f5344"
+  integrity sha512-BGBZ+07cFrbFOIiwMWDse96t91IDipwX3EeynmryU0hQYDB8xSGSpXR0AM3Ecrl5XqpY0Qi8WE2AciEYBlvpUg==
   dependencies:
     "@koa/cors" "^3.3.0"
     "@koa/router" "^10.1.1"
@@ -5257,7 +5257,7 @@ ethers@^4.0.32, ethers@^4.0.40:
     uuid "2.0.1"
     xmlhttprequest "1.8.0"
 
-ethers@^5.0.1, ethers@^5.0.2, ethers@^5.5.2, ethers@^5.6.1:
+ethers@^5.0.1, ethers@^5.0.2, ethers@^5.5.2:
   version "5.6.1"
   resolved "https://registry.yarnpkg.com/ethers/-/ethers-5.6.1.tgz#a56cd67f1595b745dc3dde0ccf2b5de53a41a6d0"
   integrity sha512-qtl/2W+dwmUa5Z3JqwsbV3JEBZZHNARe5K/A2ePcNAuhJYnEKIgGOT/O9ouPwBijSqVoQnmQMzi5D48LFNOY2A==
@@ -5293,7 +5293,7 @@ ethers@^5.0.1, ethers@^5.0.2, ethers@^5.5.2, ethers@^5.6.1:
     "@ethersproject/web" "5.6.0"
     "@ethersproject/wordlists" "5.6.0"
 
-ethers@^5.5.3:
+ethers@^5.5.3, ethers@^5.6.5:
   version "5.6.5"
   resolved "https://registry.yarnpkg.com/ethers/-/ethers-5.6.5.tgz#3185ac7815dc640993408adf6f133ffabfbcbb63"
   integrity sha512-9CTmplO9bv0s/aPw3HB3txGzKz3tUSI2EfO4dJo0W2WvaEq1ArgsEX6obV+bj5X3yY+Zgb1kAux8TDtJKe1FaA==

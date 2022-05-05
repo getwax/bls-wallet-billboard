@@ -3,5 +3,7 @@
   "port": 3501,
   "hostname": "0.0.0.0",
   "privateBlsKey": "0x0",
-  "sponsoredContracts": ["0x0", "0x0"]
+  "sponsoredContracts": ["0x0", "0x0"],
+  "verificationGateway": "0x0",
+  "rpcUrl": "https://rinkeby.arbitrum.io/rpc"
 }
