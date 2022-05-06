@@ -12,6 +12,10 @@ import loadConfig from "./loadConfig";
 (async () => {
   const config = loadConfig();
 
+  const sponsoredContracts = config.sponsoredContracts.map((sc) =>
+    sc.toLowerCase()
+  );
+
   const provider = new ethers.providers.JsonRpcProvider(config.rpcUrl);
   const utils = AggregatorUtilities__factory.connect(
     config.aggregatorUtilities,
@@ -35,7 +39,7 @@ import loadConfig from "./loadConfig";
     async (clientBundle) => {
       const isSponsored = clientBundle.operations.every((op) =>
         op.actions.every((action) =>
-          config.sponsoredContracts.includes(action.contractAddress)
+          sponsoredContracts.includes(action.contractAddress.toLowerCase())
         )
       );
 
@@ -43,7 +47,23 @@ import loadConfig from "./loadConfig";
         return clientBundle;
       }
 
-      const fees = await upstreamAggregator.estimateFee(clientBundle);
+      const fees = await upstreamAggregator.estimateFee(
+        blsWalletSigner.aggregate([
+          clientBundle,
+          wallet.sign({
+            nonce: await wallet.Nonce(),
+            actions: [
+              {
+                // Use send of 1 wei to measure fee that includes our payment
+                ethValue: 1,
+                contractAddress: utils.address,
+                encodedFunction:
+                  utils.interface.encodeFunctionData("sendEthToTxOrigin"),
+              },
+            ],
+          }),
+        ])
+      );
 
       if (!fees.successes.every((s) => s) || fees.feeType !== "ether") {
         return clientBundle;
@@ -53,11 +73,14 @@ import loadConfig from "./loadConfig";
         fees.feeDetected
       );
 
+      // pay a bit more than expected to increase chances of success
+      const paymentAmount = remainingFee.add(remainingFee.div(10));
+
       const paymentBundle = wallet.sign({
         nonce: await wallet.Nonce(),
         actions: [
           {
-            ethValue: remainingFee,
+            ethValue: paymentAmount,
             contractAddress: utils.address,
             encodedFunction:
               utils.interface.encodeFunctionData("sendEthToTxOrigin"),
