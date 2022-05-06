@@ -10,6 +10,7 @@
   "license": "CC0",
   "private": true,
   "scripts": {
+    "init-proxy-aggregator": "ts-node backend/init.ts",
     "proxy-aggregator": "ts-node backend/index.ts",
     "serve": "webpack serve"
   },
