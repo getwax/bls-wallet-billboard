@@ -1,4 +1,5 @@
 import * as io from "io-ts";
+import reporter from "io-ts-reporters";
 
 const configJson = require("./config.json");
 
@@ -20,7 +21,9 @@ export default function loadConfig(): Config {
   const decodeResult = Config.decode(configJson);
 
   if ("left" in decodeResult) {
-    throw new Error("Config decode failure");
+    throw new Error(
+      "Config decode failure: " + reporter.report(decodeResult).join("\n")
+    );
   }
 
   return decodeResult.right;

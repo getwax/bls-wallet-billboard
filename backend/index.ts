@@ -1,4 +1,4 @@
-import ethers, { BigNumber } from "ethers";
+import { ethers, BigNumber } from "ethers";
 import { runAggregatorProxy } from "bls-wallet-aggregator-proxy";
 import {
   Aggregator,
