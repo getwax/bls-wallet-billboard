@@ -42,6 +42,24 @@ const App: React.FunctionComponent = () => {
 
   React.useEffect(() => {
     (async () => {
+      try {
+        const setPreferredAggregatorResponse = await (
+          window as any
+        ).ethereum.request({
+          method: "eth_setPreferredAggregator",
+          params: [config.preferredAggregator],
+        });
+
+        if (setPreferredAggregatorResponse !== "ok") {
+          throw new Error("Failed to set preferred aggregator");
+        }
+      } catch (error) {
+        console.warn(
+          "Failed to set preferred aggregator (are you not using Quill?)",
+          error
+        );
+      }
+
       const billboard = Billboard__factory.connect(
         config.billboardAddress,
         provider
