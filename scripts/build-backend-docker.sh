@@ -2,4 +2,11 @@
 
 set -euo pipefail
 
-docker build . -f backend.dockerfile -t billboard-backend:git-$(git rev-parse HEAD | head -c 7)
+PROJECT=billboard-backend
+VERSION=$(git rev-parse HEAD | head -c 7)
+TAG=$PROJECT:git-$VERSION
+TAR_PATH=build/$PROJECT-git-$VERSION.tar
+
+docker build . -f backend.dockerfile -t $TAG
+docker save --output $TAR_PATH $TAG
+gzip $TAR_PATH
