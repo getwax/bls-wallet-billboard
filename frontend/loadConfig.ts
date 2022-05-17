@@ -3,7 +3,7 @@ import * as io from "io-ts";
 const configJson = require("./config.json");
 
 export const Config = io.type({
-  preferredAggregator: io.string,
+  preferredAggregator: io.union([io.undefined, io.string]),
   billboardAddress: io.string,
 });
 
