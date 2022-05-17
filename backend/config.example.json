@@ -1,11 +1,11 @@
 {
-  "upstreamAggregator": "https://...",
+  "upstreamAggregator": "https://arbitrum-testnet-paid.blswallet.org",
   "port": 3501,
   "hostname": "0.0.0.0",
   "privateBlsKey": "0x0",
   "sponsoredContracts": ["0x0", "0x0"],
   "verificationGateway": "0x0",
   "aggregatorUtilities": "0x0",
-  "chainId": 0,
-  "rpcUrl": "https://..."
+  "chainId": 421611,
+  "rpcUrl": "https://rinkeby.arbitrum.io/rpc"
 }
