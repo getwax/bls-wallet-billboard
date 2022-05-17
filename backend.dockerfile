@@ -9,5 +9,6 @@ WORKDIR /app
 CMD [ \
   "yarn", \
   "ts-node", \
+  "--transpileOnly", \
   "backend/index.ts" \
 ]
