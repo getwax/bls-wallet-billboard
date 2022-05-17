@@ -1,9 +1,7 @@
 # BLS Wallet Billboard
 
-Example dApp for [bls-wallet](https://github.com/jzaki/bls-wallet) which pays
-for user transactions¹.
-
-¹It's just a vanilla dApp and doesn't pay for user transactions yet.
+Example dApp for [bls-wallet](https://github.com/jzaki/bls-wallet) which can pay
+for user transactions.
 
 ## Prerequisites
 
@@ -59,3 +57,44 @@ ad here'. You may then wish to try the other billboard, and get a result like
 this:
 
 ![Cats screen](./docs/images/cats-screen.png)
+
+### Paying for User Transactions
+
+If the user is using a BLS-based wallet like Quill, they may need to pay an
+aggregator when submitting their transactions.
+
+An optional backend is included in this project which can proxy another
+aggregator and insert transactions that pay the required fees on behalf of the
+user.
+
+1. Start by copying the example config:
+
+```sh
+cp backend/config.example.json backend/config.json
+```
+
+2. Set `sponsoredContracts` to the billboard address deployed previously:
+
+```json
+{
+  ...
+  "sponsoredContracts": ["0x...(the billboard you deployed)"],
+  ...
+}
+```
+
+3. Provide addresses for the relevant `verificationGateway` and `aggregatorUtilities`. ([This may help](https://github.com/web3well/bls-wallet/tree/main/contracts/networks).)
+4. Ensure `chainId` and `rpcUrl` match the network you're using.
+5. Run `yarn ts-node backend/init.ts`. This will create the BLS wallet that will sign the payment transactions. You should see a message that the aggregator proxy requires funds for this.
+6. Send some ETH to the account described above.
+7. Run `yarn ts-node backend/init.ts` again. Ensure the balance displayed correctly reflects the ETH you sent.
+8. Set `preferredAggregator` in `frontend/config.json` to point to the proxy started above, e.g.
+
+```json
+{
+  "preferredAggregator": "http://localhost:3501",
+  "billboardAddress": "0x...(configured previously)"
+}
+```
+
+Once that's done, wallets that support `eth_setPreferredAggregator` (such as Quill) should be able to rent the billboard without any transaction fees (in this example, the user still pays the actual rent, just not the fee associated with paying that rent).
